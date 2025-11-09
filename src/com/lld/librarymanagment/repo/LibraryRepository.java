@@ -16,6 +16,8 @@ public class LibraryRepository {
     }
 
     public void addBook(Book book){
-        books.put()
+        books.put(book.getBookId(),book);
     }
+
+
 }
