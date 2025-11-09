@@ -1,0 +1,12 @@
+package com.lld.librarymanagment.service;
+
+import com.lld.librarymanagment.entity.Book;
+
+import java.util.List;
+
+public interface LibraryService {
+    public void issueDate(Integer id,Integer memberId);
+    public void renewal(Integer id,Integer memberId);
+    public void returned(Integer id,Integer memberId);
+    public List<Book> listBorrowedBooks();
+}
