@@ -62,7 +62,7 @@ public class LibraryServiceImp implements LibraryService{
     public void returned(Integer id, Integer memberId) {
 
         Optional<Borrowing> borrowingStream = libraryRepository.getBorrowingList().stream()
-                                        .filter(r -> r.getBookId().equals(id) && r.getMemberId() == id)
+                                        .filter(r -> r.getBookId().equals(id) && r.getMemberId() == memberId)
                                         .findFirst();
 
         if(borrowingStream.get().getIssuedDate().isBefore(LocalDate.now())){
