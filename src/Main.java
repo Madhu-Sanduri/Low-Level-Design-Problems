@@ -1,15 +1,34 @@
+import com.lld.librarymanagment.entity.Book;
+import com.lld.librarymanagment.entity.Member;
+import com.lld.librarymanagment.enums.Roles;
+import com.lld.librarymanagment.repo.LibraryRepository;
+import com.lld.librarymanagment.service.LibraryService;
+import com.lld.librarymanagment.service.LibraryServiceImp;
+
+import java.time.LocalDate;
+
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
-    public static void main(String[] args) {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
+    public static void main(String[] args) throws Exception {
+        LibraryRepository libraryRepository=new LibraryRepository();
+        LibraryService libraryService=new LibraryServiceImp(libraryRepository);
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            System.out.println("i = " + i);
-        }
+        Book book1=new Book(1,1897.15,"ISBN-111","Clean Code","Robin", LocalDate.of(2019,01,01),10,9);
+        Book book2=new Book(2,1897.15,"ISBN-112","Clean Cod 2e","Robin", LocalDate.of(2019,01,01),10,8);
+        Member m1 = new Member(1, Roles.MEMBER,"qqwe", LocalDate.now());
+        Member m2 = new Member(2, Roles.ADMIN, "eer",LocalDate.now());
+
+        libraryRepository.addMember(m2);
+        libraryRepository.addMember(m1);
+
+        libraryService.issueDate(1,1);
+        libraryService.issueDate(2,1);
+        libraryService.listBorrowedBooks();
+
+        libraryService.returned(1,1);
+
+        libraryService.listBorrowedBooks();
+
     }
 }

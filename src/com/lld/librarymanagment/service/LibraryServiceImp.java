@@ -7,6 +7,7 @@ import com.lld.librarymanagment.repo.LibraryRepository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 public class LibraryServiceImp implements LibraryService{
 
@@ -43,16 +44,41 @@ public class LibraryServiceImp implements LibraryService{
     @Override
     public void renewal(Integer id, Integer memberId) {
 
+        libraryRepository.getBorrowingList().stream()
+                .filter( record -> record.getBookId().equals(id)
+                        && record.getMemberId()==memberId
+                        && !record.isOverDue())
+                .findFirst()
+
+                .ifPresent(r->{
+                    r.getBookId().decrementCopt();
+                    r.calculateFine();
+                    System.out.println("Book renewed");
+                });
 
     }
 
     @Override
     public void returned(Integer id, Integer memberId) {
 
+        Optional<Borrowing> borrowingStream = libraryRepository.getBorrowingList().stream()
+                                        .filter(r -> r.getBookId().equals(id) && r.getMemberId() == id)
+                                        .findFirst();
+
+        if(borrowingStream.get().getIssuedDate().isBefore(LocalDate.now())){
+            borrowingStream.get().setReturned(true);
+        }
+        else{
+            int fine=borrowingStream.get().calculateFine();
+            System.out.println("please pay over due fine: "+fine);
+        }
+
+
     }
 
     @Override
-    public List<Book> listBorrowedBooks() {
-        return List.of();
+    public void listBorrowedBooks() {
+        libraryRepository.getBorrowingList()
+                .forEach(System.out::println);
     }
 }
